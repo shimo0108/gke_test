@@ -1,10 +1,21 @@
-FROM golang:1.18.1
-WORKDIR /Users/shimosasashouta/go/src/github.com/shimo0108/gke_test
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+FROM golang:1.18.1 as builder
+WORKDIR /go/src
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=0 /Users/shimosasashouta/go/src/github.com/shimo0108/gke_test/app .
-CMD ["./app"]
+COPY go.mod ./
+RUN go mod download
+
+COPY ./main.go  ./
+
+ARG CGO_ENABLED=0
+ARG GOOS=linux
+ARG GOARCH=amd64
+RUN go build \
+    -o /go/bin/main \
+    -ldflags '-s -w'
+
+
+FROM scratch as runner
+
+COPY --from=builder /go/bin/main /app/main
+
+ENTRYPOINT ["/app/main"]
