@@ -7,7 +7,7 @@ steps:
           dynamic_substitutions: true
       id: docker build
     - name: 'gcr.io/cloud-builders/docker'
-      args: ['push', 'gcr.io/'${_IMAGE_NAME}/test']
+      args: ['push', 'gcr.io/${_IMAGE_NAME}/test']
       id: docker push
     - name: 'gcr.io/cloud-builders/gcloud'
       args: ['container','clusters', 'get-credentials', 'gke-test-cluster', '--zone', 'asia-northeast1-c', '--project', '${PROJECT_ID}']
