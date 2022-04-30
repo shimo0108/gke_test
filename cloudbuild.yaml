@@ -8,7 +8,11 @@ steps:
     - name: 'gcr.io/cloud-builders/gcloud'
       args: ['container','clusters', 'get-credentials', 'gke-test-cluster', '--zone', 'asia-northeast1-c', '--project', '${PROJECT_ID}']
       id: cloud container clusters get-credentials
-    - name: 'gcr.io/cloud-builders/kubectl'
+    - name: "gcr.io/cloud-builders/kubectl"
       args: ['apply','-f', 'k8s-gke-test.yaml']
+      env:
+        - "CLOUDSDK_COMPUTE_REGION=<cluster region> (regional clusters)"
+        - "CLOUDSDK_COMPUTE_ZONE=<cluster zone>"
+        - "CLOUDSDK_CONTAINER_CLUSTER=<cluster name>"
       id: kubectl apply
      
