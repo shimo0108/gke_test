@@ -1,0 +1,18 @@
+steps:
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['build', '-t', '${_IMAGE_NAME}', '.']
+      substitutions:
+          _IMAGE_NAME: 'gcr.io/${PROJECT_ID}/test'
+      options:
+          dynamic_substitutions: true
+      id: docker build
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['push', 'gcr.io/'${_IMAGE_NAME}/test']
+      id: docker push
+    - name: 'gcr.io/cloud-builders/gcloud'
+      args: ['container','clusters', 'get-credentials', 'gke-test-cluster', '--zone', 'asia-northeast1-c', '--project', '${PROJECT_ID}']
+      id: cloud container clusters get-credentials
+    - name: 'gcr.io/cloud-builders/kubectl'
+      args: ['apply','-f', 'k8s-gke-test.yaml']
+      id: kubectl apply
+     

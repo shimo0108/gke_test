@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gke-test-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gke-test-cluster
+  template:
+    metadata:
+      labels:
+        app: gke-test-cluster
+    spec:
+      containers:
+      - name: gke-test-cluster
+        image: gcr.io/${PROJECT_ID}/test
+        resources:
+          cpu: 100m
+          memory: 100Mi
+        ports:
+        - containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+    name: gke-test-cluster
+spec:
+    type: LoadBalancer
+    selector:
+        app: gke-test-cluster
+    ports:
+    - name: http
+    port: 8080
+    targetPort: 8080
