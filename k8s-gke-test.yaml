@@ -15,9 +15,6 @@ spec:
       containers:
       - name: gke-test-cluster
         image: gcr.io/${PROJECT_ID}/test
-        resources:
-          cpu: 100m
-          memory: 100Mi
         ports:
         - containerPort: 8080
 ---
