@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: gke-test-cluster
-        image: gcr.io/${PROJECT_ID}/test
+        image: gcr.io/shimo-project-338708/test
         resources:
             requests:
                 cpu: 100m
